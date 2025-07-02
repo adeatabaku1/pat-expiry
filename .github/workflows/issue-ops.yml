@@ -1,0 +1,42 @@
+# File: .github/workflows/issue-ops.yml
+name: Issue Operations
+
+# Trigger on new or edited issues
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  collect-and-store:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 2.1. Make the repo available if you ever want to commit back, etc.
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2.2. Extract just the bits we care about into a JSON file.
+      #      GITHUB_EVENT_PATH is the full event payload on disk.
+      - name: Build issue_result.json
+        run: |
+          echo "Reading event payload: $GITHUB_EVENT_PATH"
+          # Use jq (preinstalled) to pull out exactly the fields you want
+          jq '
+            .issue
+            | {
+                number: .number,
+                title: .title,
+                user: .user.login,
+                labels: (.labels | map(.name)),
+                body: .body
+              }
+          ' "$GITHUB_EVENT_PATH" > issue_result.json
+          echo "Generated issue_result.json:"
+          cat issue_result.json
+
+      # 2.3. Upload that JSON file as a build artifact so you can download it later
+      - name: Upload JSON artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: issue-result
+          path: issue_result.json
