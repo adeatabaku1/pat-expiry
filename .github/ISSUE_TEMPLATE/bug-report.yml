@@ -1,0 +1,33 @@
+# File: .github/ISSUE_TEMPLATE/bug-report.yml
+name: Bug Report
+description: Use this template for reporting bugs in the project
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug! Please fill in as much info as you can.
+  - type: input
+    attributes:
+      id: steps-to-reproduce
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to…
+        2. Click on…
+        3. See error
+      required: true
+  - type: textarea
+    attributes:
+      id: expected-behavior
+      label: What did you expect to happen?
+      placeholder: Describe what you expected.
+  - type: textarea
+    attributes:
+      id: actual-behavior
+      label: What actually happened?
+      placeholder: Describe what went wrong.
+  - type: textarea
+    attributes:
+      id: additional-context
+      label: Additional context
+      placeholder: Any other details, logs, screenshots...
